@@ -9,8 +9,8 @@ syntax enable
 set t_Co=256
 
 " color theme
-colo railscasts
-set background=dark
+color railscasts
+set background=light
 colorscheme solarized
 
 " if the file is changed outside vim, then read the file 
@@ -27,13 +27,12 @@ set sidescroll=10 " automatically scroll when the cursor moves to bottom
 " display the last command 
 set showcmd
 
-
 "====================
 " Key bindings 
 "====================
 
-" map leader to ','
-let mapleader=","
+" map leader to space 
+let mapleader=" "
 
 "====================
 " Editing
@@ -78,6 +77,45 @@ set nowrapscan " stop search at the end of file
 " turn off search highlight with ,-<space>
 nnoremap <leader>n :noh<CR>
 
+
+"====================
+" Custom Binding 
+"====================
+" "Aliases" for commonly used commands+lazy shift finger:
+command! -bar -nargs=* -complete=file -range=% -bang W <line1>,<line2>write<bang> <args>
+command! -bar -nargs=* -complete=file -range=% -bang Write <line1>,<line2>write<bang> <args>
+command! -bar -nargs=* -complete=file -range=% -bang Wq <line1>,<line2>wq<bang> <args>
+command! -bar                                  -bang Wqall wqa<bang>
+command! -bar -nargs=* -complete=file -range=% -bang We <line1>,<line2>w<bang> | e <args>
+command! -bar -nargs=* -complete=file -count   -bang Wnext <count>wnext<bang> <args>
+command! -bar -nargs=* -complete=file -count   -bang Wprevious <count>wprevious<bang> <args>
+command! -bar -nargs=* -complete=file          -bang E edit<bang> <args>
+command! -bar -nargs=* -complete=file          -bang Edit edit<bang> <args>
+command! -bar                                  -bang Q quit<bang>
+command! -bar                                  -bang Quit quit<bang>
+command! -bar                                  -bang Qall qall<bang>
+command! -bar -nargs=? -complete=option              Set       set <args>
+command! -bar -nargs=? -complete=help                Help      help <args>
+command! -bar -nargs=* -complete=file          -bang Make make<bang> <args>
+command! -bar -nargs=* -complete=buffer        -bang Bdel bdel<bang> <args>
+command! -bar -nargs=* -complete=buffer        -bang Bwipe bwipe<bang> <args>
+command! -bar -nargs=* -complete=file          -bang Mksession mksession<bang> <args>
+command! -bar -nargs=* -complete=dir           -bang Cd cd<bang> <args>
+command! -bar                                        Messages messages
+command! -bar -nargs=+ -complete=file          -bang Source source<bang> <args>
+
+" split windows 
+nnoremap <leader>\ :vs<CR>
+nnoremap <leader>- :sp<CR>
+
+" center the window 
+nnoremap g; g;zz
+nnoremap g, g,zz
+
+" Control+s to save files
+nmap <c-s> :w<cr>
+imap <c-s> <esc>:w<cr>a
+
 "====================
 " Plugins
 "====================
@@ -93,13 +131,14 @@ Plug 'altercation/vim-colors-solarized' " color theme
 Plug 'haya14busa/incsearch.vim' " search plugin
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'w0rp/ale' " syntax and semantical error reporter
+"Plug 'w0rp/ale' " syntax and semantical error reporter
 Plug 'tpope/vim-fugitive'
-Plug 'junegunn/fzf' " fuzzy finding 
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim' 
 Plug 'terryma/vim-smooth-scroll' " creates nice srolling effect
 Plug 'scrooloose/nerdtree' " file system explorer 
+Plug 'Xuyuanp/nerdtree-git-plugin' " git status display in nerdtree 
 Plug 'benmills/vimux' " integrate vim with tmux
-Plug 'eagletmt/ghcmod-vim' " Haskell integration
 Plug 'godlygeek/tabular' " auto alignment
 Plug 'scrooloose/nerdcommenter' " comment
 Plug 'ervandew/supertab' " perform insert mode completions
@@ -129,7 +168,7 @@ nmap gai <Plug>(LiveEasyAlign)
 " format = ['x %d', '⚠ %d', '⬥ ok']
 
 " Ale 
-let g:ale_set_highlights=1 
+" let g:ale_set_highlights=1 
 
 " Airline
 let g:airline_powerline_fonts=1
@@ -154,7 +193,23 @@ map <Leader>n :NERDTreeToggle<CR>
 " let NERDTreeAutoDeleteBuffer = 1 
 " nnoremap <C-W-W> <C-W><C-W>
 
-" Vimux setting 
+
+" NERDTree Git status 
+
+
+let g:NERDTreeIndicatorMapCustom = {
+      \ "Modified"  : "✹",
+      \ "Staged"    : "✚",
+      \ "Untracked" : "✭",
+      \ "Renamed"   : "➜",
+      \ "Unmerged"  : "═",
+      \ "Deleted"   : "✖",
+      \ "Dirty"     : "✗",
+      \ "Clean"     : "✔︎",
+      \ 'Ignored'   : '☒',
+      \ "Unknown"   : "?"
+      \}
+
 " prompt for command to run by pressing ,-vp
 map <Leader>vp :VimuxPromptCommand<CR> 
 " run last command executed by VimuxCommand
@@ -163,8 +218,13 @@ map <Leader>vr :VimuxRunLastCommand<CR>
 map <Leader>vi :VimuxInspectRunner<CR>
 
 " Tabularize 
-let g:haskell_tabular=1
+" let g:haskell_tabular=1
 vmap a= :Tabularize /=<CR>  " align by =
 vmap a; :Tabularize /::<CR> " align by ::
 vmap a- :Tabularize /-><CR> " align by -> 
+
+" Fzf
+nnoremap <silent> <Leader>f :Files<CR>    " ",f" to find files  
+nnoremap <silent> <Leader>b :Buffers<CR>  " ",b" to search buffers
+
 
