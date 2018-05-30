@@ -131,7 +131,7 @@ Plug 'altercation/vim-colors-solarized' " color theme
 Plug 'haya14busa/incsearch.vim' " search plugin
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-"Plug 'w0rp/ale' " syntax and semantical error reporter
+" Plug 'w0rp/ale' " syntax and semantical error reporter
 Plug 'tpope/vim-fugitive'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim' 
