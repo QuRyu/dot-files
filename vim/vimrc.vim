@@ -30,6 +30,7 @@ set showcmd
 " highlight lines longer than 80
 highlight ColorColumn ctermbg=magenta 
 call matchadd('ColorColumn', '\%81v', 100)
+
 "====================
 " Key bindings 
 "====================
@@ -54,14 +55,48 @@ set expandtab
 set shiftwidth=4 
 set tabstop=4 
 
-" text width at each line 
-set textwidth=72
 
-" encoding scheme 
-set encoding=utf8
+set textwidth=80 " text width at each line 
+set encoding=utf8 " encoding scheme 
+set spell " spelling check 
+set nobackup " no backup~ files 
 
-" spelling check 
-set spell
+if has('unnamedplus')
+   " By default, Vim will not use the system clipboard when yanking/pasting to
+   " the default register. This option makes Vim use the system default 
+   " clipboard.
+   " Note that on X11, there are _two_ system clipboards: the " standard" one, 
+   " and the selection/mouse-middle-click one. Vim sees the " standard one 
+   " as register '+' (and this option makes Vim use it by default) 
+   " and the selection one as "             " '*'.
+   " See :h 'clipboard' for details.
+   set clipboard=unnamedplus,unnamed
+else
+   " Vim now also uses the selection system clipboard for default yank/paste.
+   set clipboard+=unnamed
+endif
+
+
+" Unicode support (taken from http://vim.wikia.com/wiki/Working_with_Unicode)
+if has("multi_byte")
+   if &termencoding == ""
+     let &termencoding = &encoding
+   endif
+   set encoding=utf-8
+   setglobal fileencoding=utf-8
+   set fileencodings=ucs-bom,utf-8,latin1
+endif
+
+" this makes vim's regex engine "not stupid"
+" see :h magic
+nnoremap / /\v
+vnoremap / /\v
+
+" Using '<' and '>' in visual mode to shift code by a tab-width left/right by
+" default exits visual mode. With this mapping we remain in visual mode after
+" such an operation.
+vnoremap < <gv
+vnoremap > >gv
 
 "====================
 " Movement 
@@ -115,9 +150,23 @@ nnoremap <leader>- :sp<CR>
 nnoremap g; g;zz
 nnoremap g, g,zz
 
-" Control+s to save files
-nmap <c-s> :w<cr>
-imap <c-s> <esc>:w<cr>a
+" fast saving 
+nnoremap <leader>w :w!<cr>
+
+" This command will allow us to save a file we don't have permission to save
+" " *after* we have already opened it. Super useful.
+cnoremap w!! w !sudo tee % >/dev/null
+
+" These create newlines like o and O but stay in normal mode
+nnoremap <silent> zj o<Esc>k
+nnoremap <silent> zk O<Esc>j
+
+" <leader>V reloads it and makes all changes active (file has to be saved first)
+ noremap <silent> <leader>V :source $MYVIMRC<CR>:filetype detect<CR>:exe 
+        \":echo 'vimrc reloaded'"<CR>
+
+" This is quit all
+noremap <Leader>q :qa<cr>
 
 "====================
 " Plugins
@@ -148,6 +197,11 @@ Plug 'ervandew/supertab' " perform insert mode completions
 Plug 'garbas/vim-snipmate' " insert snippets
 Plug 'MarcWeber/vim-addon-mw-utils' " dependency for snipmate
 Plug 'tomtom/tlib_vim' " dependency fro snipmate
+Plug 'rust-lang/rust.vim'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'junegunn/gv.vim' " vim commit browser 
+Plug 'the-lambda-church/coquille' " coq interactive theorem proving  
+Plug 'let-def/vimbufsync' " sync module used by coquille
 
 " Initialize plugin system
 call plug#end()
@@ -199,7 +253,6 @@ map <Leader>n :NERDTreeToggle<CR>
 
 " NERDTree Git status 
 
-
 let g:NERDTreeIndicatorMapCustom = {
       \ "Modified"  : "✹",
       \ "Staged"    : "✚",
@@ -227,7 +280,11 @@ vmap a; :Tabularize /::<CR> " align by ::
 vmap a- :Tabularize /-><CR> " align by -> 
 
 " Fzf
-nnoremap <silent> <Leader>f :Files<CR>    " ",f" to find files  
-nnoremap <silent> <Leader>b :Buffers<CR>  " ",b" to search buffers
+nnoremap <silent> <Leader>f :Files<CR>    " find files  
+nnoremap <silent> <Leader>b :Buffers<CR>  " search buffers
 
+" Git fugitive 
+nnoremap <silent> <Leader>gs :Gstatus<CR> " git status 
+nnoremap <silent> <Leader>gc :Gcommit<CR> " git commit 
+nnoremap <silent> <Leader>gd :Gdiff<CR>   " git diff
 
