@@ -15,19 +15,28 @@ export PATH=~/.local/bin:$PATH
 export PATH="/usr/local/opt/icu4c/bin:$PATH"
 export PATH="usr/local/opt/icu4c/include:$PATH"
 
-alias vi='/usr/local/bin/gvim -v'
+# macports 
+export PATH=$PATH:/opt/local/bin
+
+# haskell cabal
+export PATH=$PATH:~/.cabal/bin
+
+# alias vi='/usr/local/bin/gvim -v'
 alias vim='vi -v'
+alias you-get='you-get --no-caption'
 
 alias tkill='tmux kill-session -t'
 alias tnew='tmux new -s'
 alias tatt='tmux attach -t'
 alias tls='tmux ls'
 
+alias install_name_tool='xcrun install_name_tool'
+
 # export ghc='stack ghc'
 # export ghci='stack ghci'
 # export GHC_PACKAGE_PATH='stack path -ghc-package-path'
 
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
 # start pyenv automatically 
 eval "$(pyenv init -)"
@@ -117,3 +126,12 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 export PATH="/usr/local/opt/libiconv/bin:$PATH"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# PM functions
+source ~/.pm/pm.zsh
+alias pma="pm add"
+alias pmg="pm go"
+alias pmrm="pm remove"
+alias pml="pm list"
+# end PM
+export PATH="/usr/local/sbin:$PATH"
